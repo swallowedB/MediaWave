@@ -1,7 +1,12 @@
-import React from 'react'
+import { BrowserRouter } from "react-router-dom";
+import Router from "./routes/Router";
+import { Toaster } from "sonner";
 
 export default function App() {
   return (
-    <div className='text-amber-500'>Tailwind css 테스트</div>
-  )
+    <BrowserRouter>
+      <Router />
+      <Toaster richColors position="top-center" />
+    </BrowserRouter>
+  );
 }
