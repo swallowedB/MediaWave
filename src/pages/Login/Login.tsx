@@ -7,15 +7,7 @@ export default function Login() {
   const navigate = useNavigate();
 
   return (
-    <main className="relative flex flex-col items-center justify-center h-screen bg-black overflow-hidden">
-      {/* 배경 네온 빛줄기 */}
-      <div className="absolute inset-0">
-        <div
-          className="absolute top-0 left-0 w-full h-100
-                      bg-gradient-to-b from-blue-500/40 to-purple-600/30 
-                      blur-3xl rotate-45"
-        ></div>
-      </div>
+    <main className="flex flex-col items-center">
       <section
         className="relative z-10 w-80 rounded-3xl flex flex-col items-end
                   bg-gradient-to-b from-[#1a1f2e]/50 to-[#0b0e17]/60 
@@ -46,7 +38,7 @@ export default function Login() {
       <div className="fixed bottom-8 right-10">
         <button
           onClick={() => navigate("/")}
-          className="px-4 py-1 rounded-md bg-white/5 border border-white/10 text-white/70 hover:bg-white/10 transition"
+          className="px-4 py-1 rounded-md bg-white/5 border border-white/10 text-white/70 hover:bg-white/10 transition cursor-pointer "
         >
           Skip
         </button>
