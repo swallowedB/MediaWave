@@ -1,8 +1,9 @@
 import gsap from "gsap";
 import { useEffect, useRef, useState } from "react";
 import { fetchNowPlayingMovie } from "../../apis/movie";
-import Thumbnail from "./Thumbnail";
-import TrendingMovies from "./TrendingMovies";
+import Thumbnail from "./components/Thumbnail";
+import TrendingMovies from "./components/TrendingMovies";
+import PopularMovies from "./components/popularMovies";
 
 export default function Home() {
   const [nowplaying, setNowPlaying] = useState<Movie[]>([]);
@@ -38,18 +39,19 @@ export default function Home() {
 
   return (
     <main className="w-full min-h-screen ">
-      <section className="relative w-screen h-screen overflow-hidden">
+      <section className="relative w-screen h-screen ">
         <div ref={slidesRef} className="flex w-full h-full z-10">
           {nowplaying.map((movie) => (
             <Thumbnail key={movie.id} movie={movie} />
           ))}
         </div>
-        <div className="absolute bottom-5 left-0 right-0 z-20 flex justify-center">
-          <TrendingMovies />
-        </div>
       </section>
-      <section>
-        <h1 className="h-100">Movies </h1>
+      <section className="-mt-50 2xl:-mt-95 relative z-20 px-20 ">
+        <TrendingMovies />
+      </section>
+      {/* popular */}
+      <section className="mt-20 px-20">
+        <PopularMovies />
       </section>
     </main>
   );
