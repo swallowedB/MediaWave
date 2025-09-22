@@ -1,13 +1,22 @@
+import noImage from "@/assets/NoImages.png";
 import { IMAGE_BASE_URL } from "../constants/urls";
 import { truncateText } from "../utils/textFormat";
 
-export default function PosterCard({ item, className  }: { item: Movie, className?: string }) {
+export default function PosterCard({
+  item,
+  className,
+}: {
+  item: Movie;
+  className?: string;
+}) {
   const maxTitleLength = 17;
 
   // const media_type = item.name ? "tv" : "movie";
 
   return (
-    <div className={`cursor-pointer bg-white/10 rounded-xl overflow-hidden relative shadow-custom-heavy group ${className}`}>
+    <div
+      className={`cursor-pointer bg-white/10 rounded-xl overflow-hidden relative shadow-custom-heavy group ${className}`}
+    >
       <div className="w-full h-full bg-white/10 rounded-xl overflow-hidden relative shadow-custom-heavy group">
         {/* 그라데이션 오버레이 */}
         <div className="w-full h-[50%] bottom-0 absolute bg-gradient-to-t from-[#141414] to-transparent opacity-0 group-hover:opacity-100" />
@@ -26,11 +35,17 @@ export default function PosterCard({ item, className  }: { item: Movie, classNam
         </div>
 
         {/* 이미지 */}
-        <img
-          className="object-cover object-center w-full h-full "
-          src={`${IMAGE_BASE_URL}original${item.poster_path}`}
-          alt={item.title}
-        />
+        {item.poster_path ? (
+          <img
+            className="object-cover object-center w-full h-full "
+            src={`${IMAGE_BASE_URL}original${item.poster_path}`}
+            alt={item.title}
+          />
+        ) : (
+          <div className="w-full h-full items-center justify-center flex bg-gray-600 object-cover object-center">
+            <img className="  " src={noImage} alt="noImage" />
+          </div>
+        )}
       </div>
     </div>
   );
