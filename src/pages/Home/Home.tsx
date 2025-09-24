@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { fetchNowPlayingMovie } from "../../apis/movie";
 import Thumbnail from "./components/Thumbnail";
 import TrendingMovies from "./components/TrendingMovies";
-import PopularMovies from "./components/popularMovies";
+import PopularMovies from "./components/PopularMovies";
 
 export default function Home() {
   const [nowplaying, setNowPlaying] = useState<Movie[]>([]);

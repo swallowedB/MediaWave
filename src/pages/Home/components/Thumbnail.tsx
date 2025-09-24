@@ -1,7 +1,19 @@
 import { ChevronRight, Play } from "lucide-react";
+import { useState } from "react";
+import { fetchPreviewVideo } from "../../../apis/preview";
 import { IMAGE_BASE_URL } from "../../../constants/urls";
+import PreviewModal from "../../../components/PreviewModal";
 
 export default function Thumbnail({ movie }: { movie: Movie }) {
+  const [videoKey, setVideoKey] = useState<string | null>(null);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+
+  const handlePreview = async () => {
+    const key = await fetchPreviewVideo(movie.id);
+    setVideoKey(key);
+    setIsPreviewOpen(true);
+  };
+
   return (
     <section
       className="flex-shrink-0 relative w-screen h-screen flex items-end text-white"
@@ -19,7 +31,9 @@ export default function Thumbnail({ movie }: { movie: Movie }) {
           {movie?.overview}
         </p>
         <div className="mt-6 flex gap-4">
-          <button className="font-sans font-semibold px-4 py-1.5 bg-white text-[#2e2e2e] rounded-full flex items-center gap-2">
+          <button
+            onClick={handlePreview} 
+            className="font-sans font-semibold px-4 py-1.5 bg-white text-[#2e2e2e] rounded-full flex items-center gap-2">
             <p>Preview</p>
             <Play className="text-[#2e2e2e] fill-current w-4" />
           </button>
@@ -29,6 +43,12 @@ export default function Thumbnail({ movie }: { movie: Movie }) {
           </button>
         </div>
       </div>
+      {isPreviewOpen && (
+        <PreviewModal
+          videoKey={videoKey}
+          onClose={() => setIsPreviewOpen(false)}
+        />
+      )}
     </section>
   );
 }
