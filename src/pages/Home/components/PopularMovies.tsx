@@ -29,6 +29,9 @@ export default function PopularMovies() {
       if (entries[0].isIntersecting) {
         setPage((prev) => prev + 1);
       }
+    }, {
+      threshold: 0,
+      rootMargin: "100px"
     });
     if (sentinelRef.current) {
       observer.observe(sentinelRef.current);

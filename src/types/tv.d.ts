@@ -11,3 +11,8 @@ interface Media {
   vote_count: number;
   genres?: Genre[];
 }
+
+interface TvGenre {
+  id: number,
+  name: string,
+}

@@ -1,8 +1,26 @@
 import { Outlet } from "react-router-dom";
 import Footer from "../../components/Footer";
 import Header from "../../components/header/Header";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { fetchGenres } from "../../apis/genres";
+import { setMovieGenres, setTvGenres } from "../../store/genreSlice";
 
 export default function BaseLayout() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const loadGenres = async () => {
+      const movieGenres = await fetchGenres("movie");
+      const tvGenres = await fetchGenres("tv");
+      dispatch(setMovieGenres(movieGenres))
+      dispatch(setTvGenres(tvGenres));
+    }
+
+    loadGenres();
+  },[dispatch])
+
+
   return (
     <section className="relative flex flex-col items-center justify-center min-h-screen bg-[#040721]">
       <div className="absolute inset-0 z-[-999]">
