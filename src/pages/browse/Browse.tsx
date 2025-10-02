@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLoaderData } from "react-router-dom";
+import Pagination from "../../components/common/Pagination";
 import { discoverService } from "../../services/discoverService";
 import BrowseControls from "./components/BrowseControls";
 import BrowseGrid from "./components/BrowseGrid";
@@ -15,7 +16,7 @@ export default function Browse() {
   const [mediaType, setMediaType] = useState<"movie" | "tv">("movie");
   const [genre, setGenre] = useState("");
   const [sort, setSort] = useState("popularity.desc");
-
+  const [totalPages, setTotalPages] = useState(initialData.total_pages);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -25,9 +26,10 @@ export default function Browse() {
         page,
       });
       setItems(results);
+      setTotalPages(totalPages);
     };
     fetchData();
-  }, [mediaType, sort, genre, page]);
+  }, [mediaType, sort, genre, page, totalPages]);
 
   return (
     <section className="mt-28 font-sans mb-40 px-20 md:px-40">
@@ -40,7 +42,13 @@ export default function Browse() {
         setGenre={setGenre}
       />
 
-      <BrowseGrid items={items} page={page} setPage={setPage} />
+      <BrowseGrid items={items} />
+
+      <Pagination
+        currentPage={page}
+        totalPages={totalPages}
+        onPageChange={setPage}
+      />
     </section>
   );
 }
