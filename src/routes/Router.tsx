@@ -1,15 +1,35 @@
-import { Route, Routes } from "react-router-dom";
-import Home from "../pages/Home/Home";
-import Login from "../pages/Login/Login";
-import BaseLayout from "./layout/BaseLayout";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Home from "../pages/home/Home";
+import Login from "../pages/auth/Login";
+import BaseLayout from "./layouts/BaseLayout";
+import { fetchThumbnail } from "./loader/home.loader";
+import NotFound from "../pages/NotFound";
 
-export default function Router() {
+const router = createBrowserRouter([
+  {
+    Component: BaseLayout,
+    children: [
+      {
+        path: "/",
+        loader: fetchThumbnail,
+        Component: Home,
+      },
+    ],
+  },
+  {
+    path: "/login",
+    Component: Login,
+  },
+  {
+    path: "*",
+    Component: NotFound,
+  },
+]);
+
+export default function Route() {
   return (
-    <Routes>
-      <Route path="/login" element={<Login />} />
-      <Route element={<BaseLayout />}>
-        <Route path="/" element={<Home />} />
-      </Route>
-    </Routes>
+    <>
+      <RouterProvider router={router} />
+    </>
   );
 }

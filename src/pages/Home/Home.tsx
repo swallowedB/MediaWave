@@ -1,7 +1,6 @@
 import gsap from "gsap";
 import { useEffect, useRef } from "react";
 import { useLoaderData } from "react-router-dom";
-import { movieService } from "../../services/movieService";
 import PopularMovies from "./components/PopularMovies";
 import Thumbnail from "./components/Thumbnail";
 import TrendingMovies from "./components/TrendingMovies";
