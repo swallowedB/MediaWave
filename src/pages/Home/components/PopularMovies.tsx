@@ -45,12 +45,15 @@ export default function PopularMovies() {
   }, []);
 
   return (
-    <section className="flex flex-col mb-30">
-      <h2 className="font-sans text-white font-medium text-2xl mb-4">
-        Popular
-      </h2>
-      <PosterGrid items={popular} />
-      <div ref={sentinelRef} />
-    </section>
+    <>
+      {loading && <p>Loading...</p>}
+      <section className="flex flex-col mb-30">
+        <h2 className="font-sans text-white font-medium text-2xl mb-4">
+          Popular
+        </h2>
+        <PosterGrid items={popular} />
+        <div ref={sentinelRef} />
+      </section>
+    </>
   );
 }

@@ -1,9 +1,10 @@
 import gsap from "gsap";
 import { useEffect, useRef } from "react";
 import { useLoaderData } from "react-router-dom";
-import PopularMovies from "./components/PopularMovies";
 import Thumbnail from "./components/Thumbnail";
 import TrendingMovies from "./components/TrendingMovies";
+import PopularMovies from "./components/PopularMovies";
+
 
 export default function Home() {
   const { nowplaying } = useLoaderData() as { nowplaying: Movie[] };
