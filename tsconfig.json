@@ -8,6 +8,10 @@
     "baseUrl": "./src",
     "paths": {
       "@/*": ["*"]
-    }
+    },
+    "types": ["react", "react-dom", "react-window"],
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
   }
 }

@@ -19,7 +19,7 @@ export default function SearchResultItems({ item }: { item: SearchResult }) {
   return (
     <>
       <hr className="text-white/40" />
-      <section className="flex gap-5 items-start cursor-pointer px-10 py-3 hover:bg-gradient-to-b hover:from-[#625cda]/10 hover:via-[#1a223a]/40 hover:to-[#625cda]/10 transition-all ease-in-out duration-150 ">
+      <section className="flex gap-5 items-center cursor-pointer px-10 py-3 hover:bg-gradient-to-b hover:from-[#625cda]/10 hover:via-[#1a223a]/40 hover:to-[#625cda]/10 transition-all ease-in-out duration-150 ">
         {/* 포스터 */}
         <div className="aspect-[2/3] min-w-20 w-[15%] rounded-md object-cover overflow-hidden bg-gray-600 flex items-center justify-center">
           <img
