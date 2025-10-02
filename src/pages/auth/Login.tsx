@@ -31,7 +31,7 @@ export default function Login() {
           ) : (
             <FormBox
               type="signUp"
-              className="bg-gradient-to-r from-indigo-600 to-blue-300 text-white font-sm"
+              className="bg-gradient-to-r from-indigo-600 to-blue-400 text-white font-sm"
             />
           )}
         </section>

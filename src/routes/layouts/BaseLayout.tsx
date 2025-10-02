@@ -22,7 +22,7 @@ export default function BaseLayout() {
 
 
   return (
-    <section className="relative flex flex-col items-center justify-center min-h-screen bg-[#040721]">
+    <section className="relative flex flex-col items-center justify-center min-h-screen bg-[#040721] w-full">
       <div className="absolute inset-0 z-[-999]">
         <div
           className="absolute top-0 left-0 w-full h-100 z-[-50]
