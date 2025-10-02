@@ -1,16 +1,19 @@
 import logo from "@/assets//Logo.svg";
 import { FaGithub } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 export default function Footer() {
+  const navigate = useNavigate();
   return (
     <footer className="absolute bottom-0 w-full bg-main-700/5 backdrop-blur-sm mt-20 border-t border-white/10">
       <div className="px-10 py-6 flex items-center gap-5">
         {/* 로고 */}
         <div className="flex items-center gap-3">
           <img
+            onClick={() => navigate("/")}
             src={logo}
             alt="MediaWave"
-            className="h-6 w-auto opacity-80 hover:opacity-100 transition-opacity"
+            className="h-6 w-auto opacity-80 hover:opacity-100 transition-opacity cursor-pointer"
           />
         </div>
         {/* 카피라이트 */}
