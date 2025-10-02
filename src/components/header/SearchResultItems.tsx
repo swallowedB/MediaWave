@@ -46,7 +46,7 @@ export default function SearchResultItems({ item }: { item: SearchResult }) {
             ) : (
               ""
             )}
-            <span className="bg-white/20 rounded-full px-2 py-0.5 font-sans text-sm font-semibold" >{(item.media_type).toUpperCase()}</span>
+            <span className="bg-white/20 rounded-full px-2 py-1 font-sans text-xs font-medium" >{(item.media_type).toUpperCase()}</span>
           </div>
           <div className="flex items-center flex-wrap gap-1">
             {genres.length > 0 &&
