@@ -1,9 +1,9 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Home from "../pages/home/Home";
+import NotFound from "../pages/NotFound";
 import Login from "../pages/auth/Login";
+import Home from "../pages/home/Home";
 import BaseLayout from "./layouts/BaseLayout";
 import { fetchThumbnail } from "./loader/home.loader";
-import NotFound from "../pages/NotFound";
 
 const router = createBrowserRouter([
   {
