@@ -11,7 +11,6 @@ export const genreService = {
           acc[genre.id] = genre.name;
           return acc;
         },
-        {}
       );
     } catch (error) {
       console.error("🚨 장르 불러오기 실패", error);

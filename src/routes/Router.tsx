@@ -1,9 +1,11 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import NotFound from "../pages/NotFound";
 import Login from "../pages/auth/Login";
-import BaseLayout from "./layouts/BaseLayout";
-import { fetchThumbnail } from "./loader/home.loader";
+import Browse from "../pages/browse/Browse";
 import Home from "../pages/home/Home";
+import BaseLayout from "./layouts/BaseLayout";
+import { fetchHomeData } from "./loader/home.loader";
+import { fetchBrowse } from "./loader/browse.loader";
 
 const router = createBrowserRouter([
   {
@@ -11,8 +13,13 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        loader: fetchThumbnail,
+        loader: fetchHomeData,
         Component: Home,
+      },
+      {
+        path: "/browse",
+        loader: fetchBrowse,
+        Component: Browse,
       },
     ],
   },

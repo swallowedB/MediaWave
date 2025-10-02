@@ -6,12 +6,12 @@ export default function PosterCard({
   item,
   className,
 }: {
-  item: Movie;
+  item: Movie | Tv;
   className?: string;
 }) {
   const maxTitleLength = 17;
 
-  // const media_type = item.name ? "tv" : "movie";
+  const title = "title" in item ? item.title : item.name;
 
   return (
     <div
@@ -27,7 +27,7 @@ export default function PosterCard({
             <p className="text-white font-noto text-xs">↗ {item.popularity}</p>
           </div>
           <p className="text-xl font-semibold text-white">
-            {truncateText(item.title, maxTitleLength)}
+            {truncateText(title, maxTitleLength)}
           </p>
           <p className="text-white font-noto text-[10px] mt-2 line-clamp-2 opacity-80">
             {item.overview}
@@ -39,7 +39,7 @@ export default function PosterCard({
           <img
             className="object-cover object-center w-full h-full "
             src={`${IMAGE_BASE_URL}original${item.poster_path}`}
-            alt={item.title}
+            alt={title}
           />
         ) : (
           <div className="w-full h-full items-center justify-center flex bg-gray-600 object-cover object-center">

@@ -8,7 +8,7 @@ interface PosterGridProps {
 
 export default function PosterGrid({
   items,
-  columns = 6,
+  columns = 7,
   rowsToShow,
 }: PosterGridProps) {
   const chunkSize = columns;
@@ -24,12 +24,13 @@ export default function PosterGrid({
       {visibleRows.map((row, rowIndex) => (
         <div
           key={rowIndex}
-          className="grid gap-5
-          grid-cols-2    
-          sm:grid-cols-3  
-          md:grid-cols-4  
-          lg:grid-cols-6
-          "
+          className={`grid gap-5 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 ${
+            columns === 6
+              ? "lg:grid-cols-6"
+              : columns === 7
+              ? "lg:grid-cols-7"
+              : ""
+          }`}
         >
           {row.map((item) => (
             <PosterCard

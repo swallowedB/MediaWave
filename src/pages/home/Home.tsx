@@ -1,13 +1,17 @@
 import gsap from "gsap";
 import { useEffect, useRef } from "react";
 import { useLoaderData } from "react-router-dom";
+import BrowsePreview from "./components/BrowsePreview";
 import Thumbnail from "./components/Thumbnail";
 import TrendingMovies from "./components/TrendingMovies";
-import PopularMovies from "./components/PopularMovies";
-
 
 export default function Home() {
-  const { nowplaying } = useLoaderData() as { nowplaying: Movie[] };
+  const { nowplaying, popular, trending, topRated } = useLoaderData() as {
+    nowplaying: Movie[];
+    popular: Movie[];
+    trending: Movie[];
+    topRated: Movie[];
+  };
   const slidesRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -38,9 +42,23 @@ export default function Home() {
       <section className="-mt-50 2xl:-mt-95 relative z-20 px-20 ">
         <TrendingMovies />
       </section>
-      {/* popular */}
-      <section className="mt-20 px-20">
-        <PopularMovies />
+
+      <section className="flex flex-col px-20 gap-20 mb-40">
+        <BrowsePreview
+          title="Popular"
+          items={popular}
+          viewAllLink="/browse?type=movie&sort=popularity.desc"
+        />
+        <BrowsePreview
+          title="Trending Now"
+          items={trending}
+          viewAllLink="/browse?type=movie&sort=trending"
+        />
+        <BrowsePreview
+          title="Top Rated"
+          items={topRated}
+          viewAllLink="/browse?type=movie&sort=vote_average.desc"
+        />
       </section>
     </main>
   );

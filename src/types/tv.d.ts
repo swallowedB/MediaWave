@@ -16,3 +16,16 @@ interface TvGenre {
   id: number,
   name: string,
 }
+interface Tv {
+  id: number;
+  name: string;                
+  original_name: string;
+  overview: string;
+  poster_path: string | null;
+  backdrop_path: string | null;
+  first_air_date: string;    
+  popularity: number;
+  vote_average: number;
+  genre_ids: number[];
+  media_type?: "tv";
+}
