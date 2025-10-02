@@ -3,16 +3,16 @@ import Footer from "../../components/Footer";
 import Header from "../../components/header/Header";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { fetchGenres } from "../../apis/genres";
 import { setMovieGenres, setTvGenres } from "../../store/genreSlice";
+import { genreService } from "../../services/genreService";
 
 export default function BaseLayout() {
   const dispatch = useDispatch();
 
   useEffect(() => {
     const loadGenres = async () => {
-      const movieGenres = await fetchGenres("movie");
-      const tvGenres = await fetchGenres("tv");
+      const movieGenres = await genreService.fetchGenres("movie");
+      const tvGenres = await genreService.fetchGenres("tv");
       dispatch(setMovieGenres(movieGenres))
       dispatch(setTvGenres(tvGenres));
     }

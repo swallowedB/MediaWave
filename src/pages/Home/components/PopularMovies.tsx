@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { fetchPopularMovie } from "../../../apis/movie";
 import PosterGrid from "../../../components/PosterGrid";
+import { movieService } from "../../../services/movieService";
 
 export default function PopularMovies() {
   const [popular, setPopular] = useState<Movie[]>([]);
@@ -13,7 +13,7 @@ export default function PopularMovies() {
     const fetchPopular = async () => {
       setLoading(true);
       try {
-        const res = await fetchPopularMovie(page);
+        const res = await movieService.getPopular(page);
         setPopular((prev) => [...prev, ...res]);
       } catch (error) {
         console.error(error);
@@ -25,14 +25,17 @@ export default function PopularMovies() {
   }, [page]);
 
   useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) {
-        setPage((prev) => prev + 1);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setPage((prev) => prev + 1);
+        }
+      },
+      {
+        threshold: 0,
+        rootMargin: "100px",
       }
-    }, {
-      threshold: 0,
-      rootMargin: "100px"
-    });
+    );
     if (sentinelRef.current) {
       observer.observe(sentinelRef.current);
     }

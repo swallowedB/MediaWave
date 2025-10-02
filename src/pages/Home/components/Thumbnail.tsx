@@ -1,15 +1,15 @@
 import { ChevronRight, Play } from "lucide-react";
 import { useState } from "react";
-import { fetchPreviewVideo } from "../../../apis/preview";
 import { IMAGE_BASE_URL } from "../../../constants/urls";
 import PreviewModal from "../../../components/PreviewModal";
+import { videoService } from "../../../services/videoService";
 
 export default function Thumbnail({ movie }: { movie: Movie }) {
   const [videoKey, setVideoKey] = useState<string | null>(null);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
   const handlePreview = async () => {
-    const key = await fetchPreviewVideo(movie.id);
+    const key = await videoService.getPreviewKey(movie.id);
     setVideoKey(key);
     setIsPreviewOpen(true);
   };

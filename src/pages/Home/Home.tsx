@@ -1,25 +1,14 @@
 import gsap from "gsap";
-import { useEffect, useRef, useState } from "react";
-import { fetchNowPlayingMovie } from "../../apis/movie";
+import { useEffect, useRef } from "react";
+import { useLoaderData } from "react-router-dom";
+import { movieService } from "../../services/movieService";
+import PopularMovies from "./components/PopularMovies";
 import Thumbnail from "./components/Thumbnail";
 import TrendingMovies from "./components/TrendingMovies";
-import PopularMovies from "./components/PopularMovies";
 
 export default function Home() {
-  const [nowplaying, setNowPlaying] = useState<Movie[]>([]);
+  const { nowplaying } = useLoaderData() as { nowplaying: Movie[] };
   const slidesRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    const fetchNowPlaying = async () => {
-      try {
-        const res = await fetchNowPlayingMovie();
-        setNowPlaying(res);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchNowPlaying();
-  }, []);
 
   useEffect(() => {
     if (nowplaying.length === 0 || !slidesRef.current) return;

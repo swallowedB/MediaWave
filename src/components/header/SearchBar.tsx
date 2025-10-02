@@ -1,8 +1,8 @@
 import { Search } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
-import { fetchSearchResults } from "../../apis/search";
 import useDebounce from "../../hook/useDebounce";
 import SearchResults from "./SearchResults";
+import { searchService } from "../../services/searchService";
 
 export default function SearchBar() {
   const [query, setQuery] = useState("");
@@ -32,7 +32,7 @@ export default function SearchBar() {
     async (pageToFetch: number, isLoadMore = false) => {
       try {
         setLoading(true);
-        const { results: newResults, total_pages } = await fetchSearchResults(
+        const { results: newResults, total_pages } = await searchService.searchMulti(
           debouncedQuery,
           pageToFetch
         );

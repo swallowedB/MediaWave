@@ -2,8 +2,8 @@ import gsap from "gsap";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
-import { fetchTrendingMovie } from "../../../apis/movie";
 import PosterGrid from "../../../components/PosterGrid";
+import { movieService } from "../../../services/movieService";
 
 export default function TrendingMovies() {
   const [trending, setTrending] = useState<Movie[]>([]);
@@ -25,7 +25,7 @@ export default function TrendingMovies() {
   useEffect(() => {
     const fetchTrendingData = async () => {
       try {
-        const res = await fetchTrendingMovie("week");
+        const res = await movieService.getTrending("week");
         setTrending(res);
       } catch (error) {
         console.error(error);
@@ -39,7 +39,7 @@ export default function TrendingMovies() {
     <section className="mb-30">
       <div className="flex justify-between">
         <h2 className="font-sans text-white font-medium text-2xl mb-4">
-          Trending 
+          Trending
         </h2>
         <button
           onClick={handleSeeMore}
