@@ -6,10 +6,12 @@ import Home from "../pages/home/Home";
 import BaseLayout from "./layouts/BaseLayout";
 import { fetchHomeData } from "./loader/home.loader";
 import { fetchBrowse } from "./loader/browse.loader";
+import ErrorState from "../components/common/ErrorState";
 
 const router = createBrowserRouter([
   {
     Component: BaseLayout,
+    errorElement: <ErrorState />,
     children: [
       {
         path: "/",
