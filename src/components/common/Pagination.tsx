@@ -31,7 +31,7 @@ export default function Pagination({
           onClick={() => onPageChange(startPage + i)}
           className={`px-3 py-1 rounded-lg transition ${
             currentPage === startPage + i
-              ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white"
+              ? "bg-pink-400 drop-shadow-[0_0_6px_rgba(236,72,153,0.8)] text-white"
               : "bg-white/10 text-white/70 hover:text-white hover:bg-white/20"
           }`}
         >
