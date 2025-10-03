@@ -1,4 +1,6 @@
 import logo from "@/assets/Logo.svg";
+import defaultImg from "@/assets/mediawaveS.png";
+import { updateProfile } from "firebase/auth";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -12,16 +14,20 @@ import SocialLogin from "./SocialLogin";
 export default function FormBox({
   type,
   className,
+  setType,
 }: {
   type: string;
   className?: string;
+  setType: React.Dispatch<React.SetStateAction<"login" | "signUp">>;
 }) {
   const [email, setEmail] = useState("");
   const [errors, setErrors] = useState({
     email: "",
     password: "",
+    nickname: "",
   });
   const [password, setPassword] = useState("");
+  const [nickname, setNickname] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -42,14 +48,52 @@ export default function FormBox({
       }));
     }
 
+    if (!nickname.trim()) {
+      setErrors((prev) => ({
+        ...prev,
+        nickname: "닉네임을 입력해주세요.",
+      }));
+    }
+
     try {
       const user =
         type === "login"
           ? await emailLogin(email, password)
           : await emailSignup(email, password);
-      dispatch(setUser(user));
-      toast.success(type === "login" ? "로그인 성공!" : "회원가입 성공!");
-      if (type === "login") navigate("/");
+
+      if (type === "signUp" && nickname) {
+        await updateProfile(user, {
+          displayName: nickname,
+          photoURL: defaultImg,
+        });
+      }
+
+      if (user) {
+        const token = await user.getIdToken();
+        dispatch(
+          setUser({
+            uid: user.uid,
+            email: user.email,
+            displayName: user.displayName,
+            photoURL: user.photoURL,
+            token,
+          })
+        );
+      }
+
+      if (type === "signUp") {
+        setEmail("");
+        setPassword("");
+        setNickname("");
+        setType("login"); 
+        toast.success("회원가입 성공! 로그인 해주세요");
+        return;
+      }
+
+      if (type === "login") {
+        navigate("/");
+        toast.success("로그인 성공!");
+      }
     } catch (error) {
       console.error(error);
       toast.error("🚨 인증 실패 : 다시 시도해주세요");
@@ -73,6 +117,16 @@ export default function FormBox({
 
       {/* 폼 */}
       <form onSubmit={handleSubmit} className="space-y-4">
+        {type === "signUp" && (
+          <FloatInput
+            id="nickname"
+            type="text"
+            value={nickname}
+            label="Nickname"
+            onChange={(e) => setNickname(e.target.value)}
+            error={errors.nickname}
+          />
+        )}
         <FloatInput
           id="email"
           type="email"

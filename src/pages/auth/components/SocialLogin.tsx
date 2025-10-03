@@ -1,15 +1,31 @@
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { githubLogin, googleLogin } from "../../../services/authService";
-import { useNavigate } from "react-router-dom";
+import { setUser } from "../../../store/authSlice";
 
 export default function SocialLogin() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const handleGoogle = async () => {
     try {
       const user = await googleLogin();
-      navigate('/')
+      if (user) {
+        const token = await user.getIdToken();
+        dispatch(
+          setUser({
+            uid: user.uid,
+            email: user.email,
+            token,
+            displayName: user.displayName,
+            photoURL: user.photoURL,
+          })
+        );
+      }
+      navigate("/");
       toast.success(`✨ Welcome ${user.displayName || "Mewo"}`);
     } catch {
       toast.error("🚨 Google 로그인 실패");
@@ -19,7 +35,19 @@ export default function SocialLogin() {
   const handleGithub = async () => {
     try {
       const user = await githubLogin();
-      navigate('/')
+      if (user) {
+        const token = await user.getIdToken();
+        dispatch(
+          setUser({
+            uid: user.uid,
+            email: user.email,
+            token,
+            displayName: user.displayName,
+            photoURL: user.photoURL,
+          })
+        );
+      }
+      navigate("/");
       toast.success(`✨ Welcome ${user.displayName || "Mewo"}`);
     } catch {
       toast.error("🚨 Github 로그인 실패");

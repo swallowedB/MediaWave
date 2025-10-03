@@ -4,7 +4,7 @@ import Footer from "../../components/Footer";
 import FormBox from "./components/FormBox";
 
 export default function Login() {
-  const [isLogin, setIsLogin] = useState(true);
+  const [formType, setFormType] = useState<"login" | "signUp">("login");
   const navigate = useNavigate();
 
   return (
@@ -23,37 +23,32 @@ export default function Login() {
         backdrop-blur-xl border border-white/10 shadow-2xl px-8 py-12"
         >
           {/* 로그인 / 회원가입 */}
-          {isLogin ? (
-            <FormBox
-              type="login"
-              className="bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-sm"
-            />
-          ) : (
-            <FormBox
-              type="signUp"
-              className="bg-gradient-to-r from-indigo-600 to-blue-400 text-white font-sm"
-            />
-          )}
+
+          <FormBox
+            type={formType}
+            setType={setFormType}
+            className="bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-sm"
+          />
         </section>
 
         <button
-          onClick={() => setIsLogin(!isLogin)}
+          onClick={() => setFormType(formType === "login" ? "signUp" : "login")}
           className="z-10 px-4 py-1 rounded-md text-xs mt-3 text-white/70 hover:bg-white/10 transition cursor-pointer"
         >
-          {isLogin ? "Sign Up →" : " Back →"}
+          {formType === "login" ? "Sign Up →" : "Back →"}
         </button>
       </section>
 
-        {/* Footer */}
-        <Footer />
-        <div className="fixed bottom-7 right-10">
-          <button
-            onClick={() => navigate("/")}
-            className="px-4 py-1 rounded-md bg-white/5 border border-white/10 text-white/70 hover:bg-white/10 transition cursor-pointer "
-          >
-            Skip
-          </button>
-        </div>
+      {/* Footer */}
+      <Footer />
+      <div className="fixed bottom-7 right-10">
+        <button
+          onClick={() => navigate("/")}
+          className="px-4 py-1 rounded-md bg-white/5 border border-white/10 text-white/70 hover:bg-white/10 transition cursor-pointer "
+        >
+          Skip
+        </button>
+      </div>
     </main>
   );
 }
