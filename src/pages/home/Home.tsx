@@ -6,11 +6,14 @@ import Thumbnail from "./components/Thumbnail";
 import TrendingMovies from "./components/TrendingMovies";
 
 export default function Home() {
-  const { nowplaying, popular, trending, topRated } = useLoaderData() as {
+  const { nowplaying, popular, topRated, tvPopular, tvTopRated, tvOnAir } = useLoaderData() as {
     nowplaying: Movie[];
     popular: Movie[];
     trending: Movie[];
     topRated: Movie[];
+    tvTopRated: Tv[];
+    tvPopular: Tv[];
+    tvOnAir: Tv[];
   };
   const slidesRef = useRef<HTMLDivElement | null>(null);
 
@@ -45,19 +48,29 @@ export default function Home() {
 
       <section className="flex flex-col px-20 gap-20 mb-40">
         <BrowsePreview
-          title="Popular"
+          title="Popular Movie"
           items={popular}
           viewAllLink="/browse?type=movie&sort=popularity.desc"
         />
         <BrowsePreview
-          title="Trending Now"
-          items={trending}
-          viewAllLink="/browse?type=movie&sort=trending"
+          title="Top Rated Movie"
+          items={topRated}
+          viewAllLink="/browse?type=tv&sort=vote_average.desc"
         />
         <BrowsePreview
-          title="Top Rated"
-          items={topRated}
-          viewAllLink="/browse?type=movie&sort=vote_average.desc"
+          title="Popular Tv"
+          items={tvPopular}
+          viewAllLink="/browse?type=tv&sort=popularity.desc"
+        />
+        <BrowsePreview
+          title="Top Rated Tv"
+          items={tvTopRated}
+          viewAllLink="/browse?type=tv&sort=vote_average.desc"
+        />
+        <BrowsePreview
+          title="OnAir Tv"
+          items={tvOnAir}
+          viewAllLink="/browse?type=tv"
         />
       </section>
     </main>

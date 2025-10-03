@@ -1,7 +1,7 @@
 import PosterCard from "./PosterCard";
 
 interface PosterGridProps {
-  items: Movie[];
+  items: Movie[] | Tv[];
   columns?: number;
   rowsToShow?: number;
 }

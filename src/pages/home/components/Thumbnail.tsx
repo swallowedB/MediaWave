@@ -16,7 +16,7 @@ export default function Thumbnail({ movie }: { movie: Movie }) {
 
   return (
     <section
-      className="flex-shrink-0 relative w-screen h-screen flex items-end text-white"
+      className="flex-shrink-0 relative w-screen h-screen flex items-end text-white font-sans"
       style={{
         backgroundImage: `url(${IMAGE_BASE_URL}original${movie?.backdrop_path})`,
         backgroundSize: "cover",
@@ -27,18 +27,18 @@ export default function Thumbnail({ movie }: { movie: Movie }) {
 
       <div className="relative z-10 pb-80 2xl:pb-115 max-w-2xl px-20 ">
         <h1 className="font-sans text-4xl font-bold w-120">{movie?.title}</h1>
-        <p className="font-sans font-medium mt-4 text-sm opacity-80 w-120">
+        <p className="font-sans font-medium mt-4 text-sm opacity-60 w-120">
           {movie?.overview}
         </p>
         <div className="mt-6 flex gap-4">
           <button
             onClick={handlePreview} 
             className="font-sans font-semibold px-4 py-1.5 bg-white text-[#2e2e2e] rounded-full flex items-center gap-2">
-            <p>Preview</p>
+            <p>미리보기</p>
             <Play className="text-[#2e2e2e] fill-current w-4" />
           </button>
           <button className="font-sans font-semibold px-4 py-1.5 bg-gray-500/30 backdrop-blur-md rounded-full flex items-center gap-1">
-            <p className="pl-1">Details</p>
+            <p className="pl-1">소개</p>
             <ChevronRight className="w-5" />
           </button>
         </div>

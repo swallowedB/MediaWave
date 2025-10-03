@@ -9,6 +9,6 @@ export const getDiscoverApi = (
       with_genres: genre || "",
       sort_by: sort || "popularity.desc",
       page: page || 1,
-      language: "en-US",
+      language: "ko-KR",
     },
   });
