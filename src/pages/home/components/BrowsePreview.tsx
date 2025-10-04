@@ -8,7 +8,7 @@ export default function BrowsePreview({
   viewAllLink = "/browse",
 }: {
   title?: string;
-  items?: Movie[] | Tv[];
+  items?: MediaBase[];
   viewAllLink?: string;
 }) {
   if (!items || items.length === 0) {
