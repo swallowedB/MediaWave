@@ -10,9 +10,13 @@ interface CommentData {
 }
 
 interface Bookmark {
-  id: string; 
-  type: "movie" | "tv";
+  id: string;
   title: string;
-  poster: string;
-  createdAt: number;
+  poster_path: string | null;
+  release_date: string;
+  overview: string;
+  popularity: number;
+  vote_average: number;
+  type: "movie" | "tv";
+  addedAt: number;
 }

@@ -48,6 +48,7 @@ export default function Browse() {
         currentPage={page}
         totalPages={totalPages}
         onPageChange={setPage}
+        className="mt-10"
       />
     </section>
   );

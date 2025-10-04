@@ -22,8 +22,19 @@ const authSlice = createSlice({
     clearUser: (state) => {
       state.user = null;
     },
+    updateProfile: (
+      state,
+      action: PayloadAction<{ displayName?: string; photoURL?: string }>
+    ) => {
+      if (state.user) {
+        if (action.payload.displayName)
+          state.user.displayName = action.payload.displayName;
+        if (action.payload.photoURL)
+          state.user.photoURL = action.payload.photoURL;
+      }
+    },
   },
 });
 
-export const { setUser, clearUser } = authSlice.actions;
+export const { setUser, clearUser, updateProfile } = authSlice.actions;
 export default authSlice.reducer;
