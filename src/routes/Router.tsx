@@ -7,6 +7,8 @@ import BaseLayout from "./layouts/BaseLayout";
 import { fetchHomeData } from "./loader/home.loader";
 import { fetchBrowse } from "./loader/browse.loader";
 import ErrorState from "../components/common/ErrorState";
+import MyPage from "../pages/my/MyPage";
+import { requireAuth } from "./loader/auth.loader";
 
 const router = createBrowserRouter([
   {
@@ -24,6 +26,11 @@ const router = createBrowserRouter([
         Component: Browse,
       },
     ],
+  },
+  {
+    path: "/my",
+    loader: requireAuth,
+    Component: MyPage,
   },
   {
     path: "/login",
