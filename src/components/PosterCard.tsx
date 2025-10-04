@@ -97,11 +97,11 @@ export default function PosterCard({
 
       <div className="absolute bottom-0 w-full p-4 flex flex-col justify-end z-10 font-sans">
         <h3 className="text-white text-sm sm:text-base font-semibold drop-shadow-[0_0_4px_rgba(0,0,0,0.6)]">
-          {truncateText(title, maxTitleLength)}
+          {truncateText(title ?? "", maxTitleLength)}
         </h3>
         {"release_date" in item && (
           <p className="text-white/60 text-xs mt-1">
-            {date.slice(0, 4) || ""}
+            {date?.slice(0, 4) || ""}
           </p>
         )}
       </div>

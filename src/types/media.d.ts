@@ -1,21 +1,62 @@
-type MediaBase = Movie | Tv | Bookmark;
-
-interface MediaDetail extends MediaBase {
-  backdrop_path: string;
+interface BaseMedia {
+  id: number;
   title?: string;
   name?: string;
-  overview: string;
-  genres?: { id: number; name: string }[];
-  runtime?: number; 
+  poster_path?: string | null;
+  backdrop_path?: string | null;
+  overview?: string;
+  popularity?: number;
+  release_date?: string;
+  first_air_date?: string;
+  vote_average?: number;
+  vote_count?: number;
+}
+
+interface Movie extends BaseMedia {
+  title: string;
+  release_date: string;
+  runtime?: number;
+  type: "movie";
+}
+
+interface Tv extends BaseMedia {
+  name: string;
+  first_air_date: string;
   episode_run_time?: number[];
+  number_of_episodes?: number;
+  number_of_seasons?: number;
+  type: "tv";
+}
+
+interface Bookmark {
+  id: number | string;
+  poster_path?: string;
+  title?: string;
+  name?: string;
+  release_date?: string;
+  first_air_date?: string;
+  popularity?: number;
+  type: "movie" | "tv";
+  addedAt?: number;
+  overview?: string;       
+  vote_average?: number; 
+}
+
+interface MediaDetail extends BaseMedia {
+  genres?: { id: number; name: string }[];
   status?: string;
   tagline?: string;
   homepage?: string;
+  runtime?: number;
+  episode_run_time?: number[];
   number_of_episodes?: number;
   number_of_seasons?: number;
   production_countries?: { name: string }[];
   production_companies?: { name: string; logo_path: string | null }[];
+  type: "movie" | "tv";
 }
+
+type MediaBase = Movie | Tv | Bookmark;
 
 interface Image {
   file_path: string;
@@ -28,7 +69,6 @@ interface ImagesResponse {
   backdrops: { file_path: string }[];
   posters: { file_path: string }[];
 }
-
 
 type SimilarResult = SimilarItem[];
 

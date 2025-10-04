@@ -1,11 +1,11 @@
 import { Bookmark, Play } from "lucide-react";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import PreviewModal from "../../../components/PreviewModal";
 import { IMAGE_BASE_URL } from "../../../constants/urls";
 import { videoService } from "../../../services/videoService";
-import { useDispatch, useSelector } from "react-redux";
-import type { AppDispatch, RootState } from "../../../store/store";
 import { toggleBookmarkThunk } from "../../../store/bookmarkSlice";
+import type { AppDispatch, RootState } from "../../../store/store";
 
 interface ThumbnailSectionProps {
   item: MediaDetail;
@@ -18,7 +18,7 @@ export default function ThumbnailSection({ item }: ThumbnailSectionProps) {
   const dispatch = useDispatch<AppDispatch>();
   const user = useSelector((state: RootState) => state.auth.user);
   const bookmarks = useSelector((state: RootState) => state.bookmarks.items);
-  const isBookmarked = bookmarks.some((b) => b.id === item.id);
+  const isBookmarked = bookmarks.some((b) => b.id === String(item.id));
 
   const handlePreview = async () => {
     const key = await videoService.getPreviewKey(item.id);
@@ -29,7 +29,25 @@ export default function ThumbnailSection({ item }: ThumbnailSectionProps) {
   const handleBookmark = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!user) return;
-    dispatch(toggleBookmarkThunk({ userId: user.uid, bookmark: item }));
+
+    const bookmark: Bookmark = {
+      id: String(item.id),
+      poster_path: item.poster_path || "",
+      title: item.title || item.name || "제목 없음",
+      name: item.name || item.title || "제목 없음",
+      release_date: item.release_date || "" ,
+      first_air_date: item.first_air_date || "",
+      popularity: item.popularity ?? 0,
+      type: item.type ? "movie" : "tv",
+      addedAt: Date.now(),
+    };
+
+    dispatch(
+      toggleBookmarkThunk({
+        userId: user.uid,
+        bookmark,
+      })
+    );
   };
 
   return (
@@ -45,7 +63,6 @@ export default function ThumbnailSection({ item }: ThumbnailSectionProps) {
       >
         {/* 오버레이 (어두운 그라데이션) */}
         <div className="absolute inset-0 bg-gradient-to-t from-[#04071f] via-[#04071f]/40 to-transparent" />
-
 
         {/* 콘텐츠 */}
         <div
@@ -90,9 +107,10 @@ export default function ThumbnailSection({ item }: ThumbnailSectionProps) {
             <button
               onClick={handleBookmark}
               className={`p-2.5 rounded-full cursor-pointer transition-all duration-300
-                ${isBookmarked
-                  ? "bg-gradient-to-br from-blue-500 to-purple-600 text-white shadow-[0_0_10px_rgba(147,51,234,0.7)]"
-                  : "bg-white/10 text-white/70 hover:bg-white/20 hover:text-white"
+                ${
+                  isBookmarked
+                    ? "bg-gradient-to-br from-blue-500 to-purple-600 text-white shadow-[0_0_10px_rgba(147,51,234,0.7)]"
+                    : "bg-white/10 text-white/70 hover:bg-white/20 hover:text-white"
                 }`}
             >
               <Bookmark
