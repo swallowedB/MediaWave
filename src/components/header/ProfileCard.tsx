@@ -79,13 +79,13 @@ export default function ProfileCard({ isOpen }: { isOpen: boolean }) {
           onClick={()=> navigate('/my')} 
           className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-white/10 cursor-pointer transition">
           <User className="w-4 h-4" />
-          MyPage
+          마이페이지
         </li>
         <li
           onClick={handleLogout} 
           className="flex items-center gap-2 px-3 py-2 hover:bg-red-500/20 text-red-400 hover:text-red-300 cursor-pointer rounded-lg transition">
           <LogOut className="w-4 h-4" />
-          Logout
+          로그아웃
         </li>
       </ul>
     </div>

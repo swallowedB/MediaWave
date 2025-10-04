@@ -38,8 +38,6 @@ export default function PosterCard({
     setLocalBookmarked(isBookmarked);
   }, [isBookmarked]);
 
-  console.log(bookmarks)
-
 
   const handleClick = () => {
     navigate(`/detail/${type}/${item.id}`);

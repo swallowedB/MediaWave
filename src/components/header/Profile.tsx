@@ -5,6 +5,7 @@ import ProfileCard from "./ProfileCard";
 import { useClickOutside } from "../../hook/useClickOutside";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../store/store";
+import { truncateText } from "../../utils/textFormat";
 
 export default function Profile() {
   const user = useSelector((state: RootState)=> state.auth.user)
@@ -12,6 +13,8 @@ export default function Profile() {
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   useClickOutside(wrapperRef, ()=> setOpen(false))
+
+  const name = truncateText(user?.displayName ?? "No-name", 8) 
   
   return (
     <div ref={wrapperRef} className="relative">
@@ -25,7 +28,7 @@ export default function Profile() {
           alt={user?.displayName ?? "User profile"}
           className="w-8 aspect-auto rounded-full "
         />
-        <p className="ml-2 text-white text-sm">{user?.displayName ?? "No-name"}</p>
+        <p className="ml-2 text-white text-sm">{name}</p>
         {open ? (
           <ChevronUp className="w-4 text-gray-100 ml-1" />
 

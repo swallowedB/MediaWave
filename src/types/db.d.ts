@@ -8,6 +8,7 @@ interface CommentData {
   userPhoto: string | null; 
   createdAt: number;
   likes: number;
+  title?: string;
 }
 
 interface Bookmark {

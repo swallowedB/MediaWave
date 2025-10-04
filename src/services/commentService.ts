@@ -171,3 +171,16 @@ export const subscribeComments = (
 
   return unsubscribe;
 };
+
+export const getMyComments = async (userId: string) => {
+  const q = query(
+    collection(db, "comments"),
+    where("userId", "==", userId),
+    orderBy("createdAt", "desc")
+  );
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  })) as CommentData[];
+};

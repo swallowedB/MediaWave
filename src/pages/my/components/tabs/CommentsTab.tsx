@@ -1,14 +1,8 @@
-import { useState, useEffect } from "react";
+import { getAuth } from "firebase/auth";
+import { useEffect, useState } from "react";
+import { getMediaDetail } from "../../../../apis/mediaApi";
+import { getMyComments } from "../../../../services/commentService";
 import Comment from "./Comment";
-
-type CommentData = {
-  id: string;
-  movieId: string;
-  content: string;
-  author: string;
-  date: string;
-  likes: number;
-};
 
 export default function CommentsTab() {
   const [comments, setComments] = useState<CommentData[]>([]);
@@ -16,21 +10,39 @@ export default function CommentsTab() {
   const [page, setPage] = useState(1);
   const perPage = 6;
 
-  useEffect(() => {
-    const dummy = Array.from({ length: 27 }).map((_, i) => ({
-      id: `c${i}`,
-      movieId: "spiderman-3",
-      content: "정말 재미있게 봤습니다 👍 정말 재미있게 봤습니다 👍 정말 재미있게 봤습니다 👍정말 재미있게 봤습니다 👍정말 재미있게 봤습니다 👍정말 재미있게 봤습니다 👍정말 재미있게 봤습니다 👍정말 재미있게 봤습니다 👍",
-      author: "보아",
-      date: "2024.10.10",
-      likes: Math.floor(Math.random() * 5000) + 1,
-    }));
-    setComments(dummy);
-  }, []);
+  const user = getAuth().currentUser;
 
-  // 정렬
+  useEffect(() => {
+    if (!user) return;
+
+    const fetchMyComments = async () => {
+      const data = await getMyComments(user.uid);
+
+      const withTitles = await Promise.all(
+        data.map(async (c) => {
+          try {
+            if (c.movieId) {
+              const detail = await getMediaDetail("movie", c.movieId);
+              return { ...c, title: detail.title || detail.name };
+            } else if (c.tvId) {
+              const detail = await getMediaDetail("tv", c.tvId);
+              return { ...c, title: detail.name || detail.title };
+            } else {
+              return { ...c, title: "알 수 없는 작품" };
+            }
+          } catch {
+            return { ...c, title: "제목 불러오기 실패" };
+          }
+        })
+      );
+      setComments(withTitles);
+    };
+
+    fetchMyComments();
+  }, [user]);
+
   const sorted = [...comments].sort((a, b) => {
-    if (sort === "latest") return b.id.localeCompare(a.id);
+    if (sort === "latest") return b.createdAt - a.createdAt;
     if (sort === "likes") return b.likes - a.likes;
     return 0;
   });
@@ -53,16 +65,16 @@ export default function CommentsTab() {
               setPage(1);
             }}
             className={`relative pb-2 px-3 text-sm font-medium cursor-pointer transition ${
-              sort === tab.key
-                ? "text-white"
-                : "text-white/50 hover:text-white"
+              sort === tab.key ? "text-white" : "text-white/50 hover:text-white"
             }`}
           >
             {tab.label}
             {sort === tab.key && (
-              <span className="absolute bottom-0 left-0 w-full h-[2px] 
+              <span
+                className="absolute bottom-0 left-0 w-full h-[2px] 
                 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500
-                shadow-[0_0_8px_rgba(147,51,234,0.8)] rounded-full"></span>
+                shadow-[0_0_8px_rgba(147,51,234,0.8)] rounded-full"
+              ></span>
             )}
           </button>
         ))}
@@ -71,7 +83,14 @@ export default function CommentsTab() {
       {/* 댓글 목록 */}
       <section className="grid grid-cols-1 md:grid-cols-2 grid-rows-3 gap-6 flex-1">
         {paginated.map((c) => (
-          <Comment key={c.id} {...c} />
+          <Comment
+            key={c.id}
+            id={c.id!}
+            {...c}
+            onDeleted={(id) =>
+              setComments((prev) => prev.filter((comment) => comment.id !== id))
+            }
+          />
         ))}
       </section>
 

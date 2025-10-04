@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Footer from "../../components/Footer";
 import Header from "../../components/header/Header";
 import Sidebar from "./components/Sidebar";
 import BookmarksTab from "./components/tabs/BookmarksTab";
