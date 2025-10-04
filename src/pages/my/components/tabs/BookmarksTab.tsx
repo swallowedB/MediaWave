@@ -37,7 +37,7 @@ export default function BookmarksTab() {
 
       {bookmarks.length > 0 ? (
         <>
-          <PosterGrid items={paginated} columns={5} className="2xl:pr-3 flex-1" />
+          <PosterGrid items={paginated} columns={5} className="w-full 2xl:pr-3 flex-1" />
           {/* 페이지네이션 */}
           <Pagination
             currentPage={page}

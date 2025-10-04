@@ -6,6 +6,7 @@ import { toggleBookmarkThunk } from "../store/bookmarkSlice";
 import type { AppDispatch, RootState } from "../store/store";
 import { truncateText } from "../utils/textFormat";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 export default function PosterCard({
   item,
@@ -28,7 +29,17 @@ export default function PosterCard({
       ? item.first_air_date
       : "";
   const type = "title" in item ? "movie" : "tv";
+  
   const isBookmarked = bookmarks.some((b) => b.id === item.id);
+
+  const [localBookmarked, setLocalBookmarked] = useState(isBookmarked);
+
+  useEffect(() => {
+    setLocalBookmarked(isBookmarked);
+  }, [isBookmarked]);
+
+  console.log(bookmarks)
+
 
   const handleClick = () => {
     navigate(`/detail/${type}/${item.id}`);
@@ -37,6 +48,9 @@ export default function PosterCard({
   const handleBookmark = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!user) return;
+
+    setLocalBookmarked((prev) => !prev);
+
     dispatch(toggleBookmarkThunk({ userId: user.uid, bookmark: item as Bookmark }));
   };
 
@@ -70,14 +84,15 @@ export default function PosterCard({
         className={`absolute z-20 top-3 right-3 p-2 rounded-full cursor-pointer
           transition-all duration-500 opacity-0 scale-90
           group-hover:opacity-100 group-hover:scale-100
-          ${isBookmarked
-            ? "bg-gradient-to-br from-blue-500 to-purple-600 text-white shadow-[0_0_12px_rgba(147,51,234,0.8)]"
-            : "bg-black/40 text-white/70 hover:text-white hover:bg-black/60"
+          ${
+            localBookmarked
+              ? "bg-gradient-to-br from-blue-500 to-purple-600 text-white shadow-[0_0_12px_rgba(147,51,234,0.8)]"
+              : "bg-black/40 text-white/70 hover:text-white hover:bg-black/60"
           }`}
       >
         <Bookmark
           className={`w-5 h-5 ${
-            isBookmarked ? "fill-current drop-shadow-[0_0_6px_rgba(147,51,234,0.7)]" : ""
+            localBookmarked ? "fill-current drop-shadow-[0_0_6px_rgba(147,51,234,0.7)]" : ""
           }`}
         />
       </button>

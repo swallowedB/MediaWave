@@ -65,10 +65,11 @@ export default function ReviewList({ comments }: ReviewListProps) {
       </div>
 
       <div
-        className="
-    grid grid-cols-1 md:grid-cols-2 gap-6 items-start justify-center mb-40
-
-  "
+        className={`${
+          paginatedComments.length > 0
+            ? "grid grid-cols-1 md:grid-cols-2 gap-6 items-start justify-center mb-40"
+            : "flex items-center justify-center mb-40 h-60"
+        }`}
       >
         {paginatedComments.length > 0 ? (
           paginatedComments.map((c) => (

@@ -50,7 +50,7 @@ export default function ThumbnailSection({ item }: ThumbnailSectionProps) {
         {/* 콘텐츠 */}
         <div
           className="relative z-10 px-4 sm:px-8 md:px-40 lg:px-60 2xl:px-80 
-      pb-10 sm:pb-16 md:pb-20"
+      pb-10 sm:pb-16 md:pb-20 -bottom-20"
         >
           {/* 장르 */}
           <div className="flex gap-2 flex-wrap mb-4">

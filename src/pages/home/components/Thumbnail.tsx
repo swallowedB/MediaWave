@@ -1,11 +1,13 @@
 import { ChevronRight, Play } from "lucide-react";
 import { useState } from "react";
-import { IMAGE_BASE_URL } from "../../../constants/urls";
+import { useNavigate } from "react-router-dom";
 import PreviewModal from "../../../components/PreviewModal";
+import { IMAGE_BASE_URL } from "../../../constants/urls";
 import { videoService } from "../../../services/videoService";
 import { truncateText } from "../../../utils/textFormat";
 
 export default function Thumbnail({ movie }: { movie: Movie }) {
+  const navigate = useNavigate();
   const [videoKey, setVideoKey] = useState<string | null>(null);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
@@ -15,7 +17,11 @@ export default function Thumbnail({ movie }: { movie: Movie }) {
     setIsPreviewOpen(true);
   };
 
-  const overview = truncateText(movie?.overview, 230)
+  const handleClick = () => {
+    navigate(`/detail/movie/${movie.id}`);
+  };
+
+  const overview = truncateText(movie?.overview, 230);
 
   return (
     <section
@@ -35,12 +41,16 @@ export default function Thumbnail({ movie }: { movie: Movie }) {
         </p>
         <div className="mt-6 flex gap-4">
           <button
-            onClick={handlePreview} 
-            className="font-sans font-semibold px-4 py-1.5 bg-white text-[#2e2e2e] rounded-full flex items-center gap-2">
+            onClick={handlePreview}
+            className="font-sans font-semibold px-4 py-1.5 bg-white text-[#2e2e2e] rounded-full flex items-center gap-2"
+          >
             <p>Preview</p>
             <Play className="text-[#2e2e2e] fill-current w-4" />
           </button>
-          <button className="font-sans font-semibold px-4 py-1.5 bg-gray-500/30 backdrop-blur-md rounded-full flex items-center gap-1">
+          <button
+            onClick={handleClick}
+            className="font-sans font-semibold px-4 py-1.5 bg-gray-500/30 backdrop-blur-md rounded-full flex items-center gap-1"
+          >
             <p className="pl-1">자세한 내용</p>
             <ChevronRight className="w-5" />
           </button>
