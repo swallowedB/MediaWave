@@ -2,19 +2,21 @@ interface PaginationProps {
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
+  className: string;
 }
 
 export default function Pagination({
   currentPage,
   totalPages,
   onPageChange,
+  className,
 }: PaginationProps) {
   const pageRange = 5;
   const startPage = Math.max(1, currentPage - Math.floor(pageRange / 2));
   const endPage = Math.min(totalPages, startPage + pageRange - 1);
 
   return (
-    <div className="flex items-center justify-center gap-2 mt-10">
+    <div className={`flex items-center justify-center gap-2 ${className}`}>
       {/* 이전 버튼 */}
       <button
         disabled={currentPage === 1}

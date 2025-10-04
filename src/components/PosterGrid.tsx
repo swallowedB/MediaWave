@@ -1,15 +1,17 @@
 import PosterCard from "./PosterCard";
 
 interface PosterGridProps {
-  items: Movie[] | Tv[];
+  items: Movie[] | Tv[] | Bookmark[];
   columns?: number;
   rowsToShow?: number;
+  className?: string;
 }
 
 export default function PosterGrid({
   items,
   columns = 7,
   rowsToShow,
+  className,
 }: PosterGridProps) {
   const chunkSize = columns;
   const rows = Array.from(
@@ -20,7 +22,7 @@ export default function PosterGrid({
   const visibleRows = rowsToShow ? rows.slice(0, rowsToShow) : rows;
 
   return (
-    <section className="flex flex-col gap-5">
+    <section className={`flex flex-col gap-5 ${className}`}>
       {visibleRows.map((row, rowIndex) => (
         <div
           key={rowIndex}
@@ -29,7 +31,9 @@ export default function PosterGrid({
               ? "lg:grid-cols-6"
               : columns === 7
               ? "lg:grid-cols-7"
-              : ""
+              : columns === 5
+              ? "lg:grid-cols-5"
+              : ''
           }`}
         >
           {row.map((item) => (

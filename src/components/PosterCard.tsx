@@ -1,52 +1,85 @@
 import noImage from "@/assets/NoImages.png";
+import { Bookmark } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
 import { IMAGE_BASE_URL } from "../constants/urls";
+import { toggleBookmarkThunk } from "../store/bookmarkSlice";
+import type { AppDispatch, RootState } from "../store/store";
 import { truncateText } from "../utils/textFormat";
 
 export default function PosterCard({
   item,
   className,
 }: {
-  item: Movie | Tv;
+  item: Movie | Tv | Bookmark;
   className?: string;
 }) {
-  const maxTitleLength = 17;
+  const dispatch = useDispatch<AppDispatch>();
+  const user = useSelector((state: RootState) => state.auth.user);
+  const bookmarks = useSelector((state: RootState) => state.bookmarks.items);
+  const maxTitleLength = 14;
 
   const title = "title" in item ? item.title : item.name;
+  const isBookmarked = bookmarks.some((b) => b.id === item.id);
+
+  const handleBookmark = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!user) return;
+    dispatch(toggleBookmarkThunk({ userId: user.uid, bookmark: item as Bookmark }));
+  };
 
   return (
     <div
-      className={`cursor-pointer bg-white/10 rounded-xl overflow-hidden relative shadow-custom-heavy group ${className}`}
+      className={`relative overflow-hidden rounded-2xl group
+        bg-white/5 backdrop-blur-xl border border-white/0
+        hover:shadow-[0_0_20px_rgba(145, 160, 255, 0.45)]
+        hover:scale-[1.02] transition-all duration-500 ease-out
+        ${className}`}
     >
-      <div className="w-full h-full bg-white/10 rounded-xl overflow-hidden relative shadow-custom-heavy group">
-        {/* 그라데이션 오버레이 */}
-        <div className="w-full h-[50%] bottom-0 absolute bg-gradient-to-t from-[#040721] to-transparent opacity-0 group-hover:opacity-100" />
-
-        {/* 내용 */}
-        <div className="absolute font-noto bottom-[5px] flex flex-col items-start justify-end p-5 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <div className="bg-[#000000]/50 rounded-3xl py-1 px-2 mb-2">
-            <p className="text-white font-noto text-xs">↗ {item.popularity}</p>
-          </div>
-          <p className="text-xl font-semibold text-white">
-            {truncateText(title, maxTitleLength)}
-          </p>
-          <p className="text-white font-noto text-[10px] mt-2 line-clamp-2 opacity-80">
-            {item.overview}
-          </p>
+      {/* 이미지 */}
+      {item.poster_path ? (
+        <img
+          src={`${IMAGE_BASE_URL}original${item.poster_path}`}
+          alt={title}
+          className="object-cover w-full h-full opacity-90 group-hover:opacity-100 transition-opacity duration-500"
+        />
+      ) : (
+        <div className="flex items-center justify-center w-full h-full bg-[#1b1f3b]">
+          <img src={noImage} alt="no image" className="opacity-50" />
         </div>
+      )}
 
-        {/* 이미지 */}
-        {item.poster_path ? (
-          <img
-            className="object-cover object-center w-full h-full "
-            src={`${IMAGE_BASE_URL}original${item.poster_path}`}
-            alt={title}
-          />
-        ) : (
-          <div className="w-full h-full items-center justify-center flex bg-gray-600 object-cover object-center">
-            <img className="  " src={noImage} alt="noImage" />
-          </div>
+      {/* 오버레이 */}
+      <div className="absolute inset-0 bg-gradient-to-t from-[#05071f]/90 via-[#05071f]/40 to-transparent opacity-80" />
+
+      <button
+        onClick={handleBookmark}
+        className={`absolute z-20 top-3 right-3 p-2 rounded-full cursor-pointer
+          transition-all duration-500 opacity-0 scale-90
+          group-hover:opacity-100 group-hover:scale-100
+          ${isBookmarked
+            ? "bg-gradient-to-br from-blue-500 to-purple-600 text-white shadow-[0_0_12px_rgba(147,51,234,0.8)]"
+            : "bg-black/40 text-white/70 hover:text-white hover:bg-black/60"
+          }`}
+      >
+        <Bookmark
+          className={`w-5 h-5 ${
+            isBookmarked ? "fill-current drop-shadow-[0_0_6px_rgba(147,51,234,0.7)]" : ""
+          }`}
+        />
+      </button>
+
+      <div className="absolute bottom-0 w-full p-4 flex flex-col justify-end z-10 font-sans">
+        <h3 className="text-white text-sm sm:text-base font-semibold drop-shadow-[0_0_4px_rgba(0,0,0,0.6)]">
+          {truncateText(title, maxTitleLength)}
+        </h3>
+        {"release_date" in item && (
+          <p className="text-white/60 text-xs mt-1">
+            {item.release_date?.slice(0, 4) || ""}
+          </p>
         )}
       </div>
+
+
     </div>
   );
 }
