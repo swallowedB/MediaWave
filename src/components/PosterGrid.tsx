@@ -40,7 +40,7 @@ export default function PosterGrid<T extends Movie | Tv | Bookmark>({
             <PosterCard
               key={item.id}
               item={item}
-              className={`w-full aspect-[2.6/3]`}
+              className={`w-full aspect-[2/3]`}
             />
           ))}
         </div>

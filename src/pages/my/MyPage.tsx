@@ -14,7 +14,7 @@ export default function MyPage() {
   return (
     <>
       <Header />
-      <main className="w-full h-dvh flex items-center justify-center font-sans px-10">
+      <main className="w-full h-dvh flex items-center justify-center font-sans px-10 pt-10">
         <div className="absolute z-0 inset-0 overflow-hidden opacity-70">
           <div className="absolute w-[60vw] h-[60vw] bg-gradient-to-r from-purple-400/30 to-blue-500/30 rounded-full blur-[90px] top-[-20%] left-[-20%] " />
           <div className="absolute w-[50vw] h-[50vw] bg-gradient-to-tr from-blue-400/50 to-purple-500/30 rounded-full blur-[90px] bottom-[-10%] right-[-10%] " />
@@ -23,7 +23,7 @@ export default function MyPage() {
 
         {/* 메인 카드 */}
         <section
-          className="max-w-7xl w-[80vw] h-[75vh] min-w-130 rounded-4xl bg-[#040721]/30 backdrop-blur-xl border border-white/15 shadow-2xl 
+          className="max-w-7xl w-[80vw] h-[89vh] min-w-130 rounded-4xl bg-[#040721]/30 backdrop-blur-xl border border-white/15 shadow-2xl 
         flex flex-col md:flex-row p-8 md:p-3 gap-10"
         >
           {/* 사이드바 */}
@@ -36,7 +36,6 @@ export default function MyPage() {
           </div>
         </section>
       </main>
-      <Footer />
     </>
   );
 }
