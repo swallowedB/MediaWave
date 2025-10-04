@@ -15,8 +15,8 @@ export default function SearchResults({
 
   return (
     <section
-      className="absolute mt-10 bg-gradient-to-b from-[#515a72]/20 to-[#454b5c]/40 
-        backdrop-blur-lg border border-white/30 rounded-lg w-[40vw] h-[60vh] overflow-hidden"
+      className="absolute z-40 mt-10 bg-gradient-to-b from-[#515a72]/20 to-[#454b5c]/40 
+        backdrop-blur-3xl border border-white/30 rounded-lg w-[40vw] h-[60vh] overflow-hidden"
     >
 
       {loading && items.length === 0 && (

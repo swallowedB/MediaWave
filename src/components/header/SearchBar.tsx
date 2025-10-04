@@ -1,8 +1,9 @@
 import { Search } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import useDebounce from "../../hook/useDebounce";
 import SearchResults from "./SearchResults";
 import { searchService } from "../../services/searchService";
+import { useClickOutside } from "../../hook/useClickOutside";
 
 export default function SearchBar() {
   const [query, setQuery] = useState("");
@@ -12,6 +13,9 @@ export default function SearchBar() {
   const [loading, setLoading] = useState(false);
 
   const debouncedQuery = useDebounce(query, 500);
+  const wrapperRef = useRef<HTMLDivElement | null>(null);
+
+  useClickOutside(wrapperRef, () => setQuery(""))
 
   useEffect(() => {
     if (query) {
@@ -68,7 +72,9 @@ export default function SearchBar() {
   }, [debouncedQuery]);
 
   return (
-    <div className="relative flex flex-col items-center">
+    <div
+      ref={wrapperRef} 
+      className="relative flex flex-col items-center">
       <input
         type="text"
         value={query}
