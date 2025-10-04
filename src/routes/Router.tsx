@@ -8,7 +8,9 @@ import { fetchHomeData } from "./loader/home.loader";
 import { fetchBrowse } from "./loader/browse.loader";
 import ErrorState from "../components/common/ErrorState";
 import MyPage from "../pages/my/MyPage";
-import { requireAuth } from "./loader/auth.loader";
+import { redirectIfAuth, requireAuth } from "./loader/auth.loader";
+import MediaDetail from "../pages/detail/MediaDetail";
+import { mediaDetailLoader } from "./loader/detail.loader";
 
 const router = createBrowserRouter([
   {
@@ -25,6 +27,11 @@ const router = createBrowserRouter([
         loader: fetchBrowse,
         Component: Browse,
       },
+      {
+        path: "/detail/:type/:id",
+        loader: mediaDetailLoader,
+        Component: MediaDetail,
+      },
     ],
   },
   {
@@ -34,6 +41,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/login",
+    loader: redirectIfAuth,
     Component: Login,
   },
   {

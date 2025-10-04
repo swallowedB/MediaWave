@@ -1,12 +1,13 @@
 interface CommentData {
-  content: string; 
+  id?: string; 
+  movieId?: string | null;
+  tvId?: string | null;
+  content: string;
   userId: string;
-  userName: string; 
-  userPhoto?: string; 
-  createdAt: number; 
-  likes: number; 
-  movieId?: string; 
-  tvId?: string; 
+  userName: string;
+  userPhoto: string | null; 
+  createdAt: number;
+  likes: number;
 }
 
 interface Bookmark {

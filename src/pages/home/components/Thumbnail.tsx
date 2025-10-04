@@ -3,6 +3,7 @@ import { useState } from "react";
 import { IMAGE_BASE_URL } from "../../../constants/urls";
 import PreviewModal from "../../../components/PreviewModal";
 import { videoService } from "../../../services/videoService";
+import { truncateText } from "../../../utils/textFormat";
 
 export default function Thumbnail({ movie }: { movie: Movie }) {
   const [videoKey, setVideoKey] = useState<string | null>(null);
@@ -13,6 +14,8 @@ export default function Thumbnail({ movie }: { movie: Movie }) {
     setVideoKey(key);
     setIsPreviewOpen(true);
   };
+
+  const overview = truncateText(movie?.overview, 230)
 
   return (
     <section
@@ -28,17 +31,17 @@ export default function Thumbnail({ movie }: { movie: Movie }) {
       <div className="relative z-10 pb-80 2xl:pb-115 max-w-2xl px-20 ">
         <h1 className="font-sans text-4xl font-bold w-120">{movie?.title}</h1>
         <p className="font-sans font-medium mt-4 text-sm opacity-60 w-120">
-          {movie?.overview}
+          {overview}
         </p>
         <div className="mt-6 flex gap-4">
           <button
             onClick={handlePreview} 
             className="font-sans font-semibold px-4 py-1.5 bg-white text-[#2e2e2e] rounded-full flex items-center gap-2">
-            <p>미리보기</p>
+            <p>Preview</p>
             <Play className="text-[#2e2e2e] fill-current w-4" />
           </button>
           <button className="font-sans font-semibold px-4 py-1.5 bg-gray-500/30 backdrop-blur-md rounded-full flex items-center gap-1">
-            <p className="pl-1">소개</p>
+            <p className="pl-1">자세한 내용</p>
             <ChevronRight className="w-5" />
           </button>
         </div>

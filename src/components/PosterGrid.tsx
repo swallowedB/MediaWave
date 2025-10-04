@@ -1,18 +1,18 @@
 import PosterCard from "./PosterCard";
 
-interface PosterGridProps {
-  items: Movie[] | Tv[] | Bookmark[];
+interface PosterGridProps<T extends Movie | Tv | Bookmark> {
+  items: T[];
   columns?: number;
   rowsToShow?: number;
   className?: string;
 }
 
-export default function PosterGrid({
+export default function PosterGrid<T extends Movie | Tv | Bookmark>({
   items,
   columns = 7,
   rowsToShow,
   className,
-}: PosterGridProps) {
+}: PosterGridProps<T>) {
   const chunkSize = columns;
   const rows = Array.from(
     { length: Math.ceil(items.length / chunkSize) },

@@ -1,4 +1,22 @@
-import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, increment, limit, orderBy, query, QueryDocumentSnapshot, setDoc, startAfter, updateDoc, where, type DocumentData } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  increment,
+  limit,
+  onSnapshot,
+  orderBy,
+  query,
+  QueryDocumentSnapshot,
+  setDoc,
+  startAfter,
+  updateDoc,
+  where,
+  type DocumentData,
+} from "firebase/firestore";
 import { db } from "../lib/firebase";
 
 // 댓글 추가
@@ -58,10 +76,13 @@ export const getComments = async ({
     }
 
     const snapshot = await getDocs(q);
-    const comments = snapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+    const comments = snapshot.docs.map(
+      (doc) =>
+        ({
+          id: doc.id,
+          ...doc.data(),
+        } as CommentData)
+    );
 
     return {
       comments,
@@ -75,29 +96,29 @@ export const getComments = async ({
 
 // 댓글 수정
 export const updateComment = async (commentId: string, content: string) => {
-  try{
+  try {
     const ref = doc(db, "comments", commentId);
-    await updateDoc(ref, {content})
-  }catch(error){
+    await updateDoc(ref, { content });
+  } catch (error) {
     console.error("🚨 댓글 수정 실패:", error);
     throw error;
   }
-}
+};
 
 // 댓글 삭제
 export const deleteComment = async (commentId: string) => {
-  try{
+  try {
     const ref = doc(db, "comments", commentId);
     await deleteDoc(ref);
-  } catch(error){
+  } catch (error) {
     console.error("🚨 댓글 삭제 실패:", error);
     throw error;
   }
-}
+};
 
 // 댓글 좋아요
 export const toggleLikeComment = async (commentId: string, userId: string) => {
-  try{
+  try {
     const likeRef = doc(db, "comments", commentId, "likes", userId);
     const commentRef = doc(db, "comments", commentId);
 
@@ -111,8 +132,42 @@ export const toggleLikeComment = async (commentId: string, userId: string) => {
       await setDoc(likeRef, { createdAt: Date.now() });
       await updateDoc(commentRef, { likes: increment(1) });
     }
-  }catch (error){
-    console.error("🚨 댓글 좋아요 처리 실패:", error)
+  } catch (error) {
+    console.error("🚨 댓글 좋아요 처리 실패:", error);
     throw error;
   }
-}
+};
+
+export const subscribeComments = (
+  {
+    movieId,
+    tvId,
+    sortBy = "createdAt",
+    order = "desc",
+  }: {
+    movieId?: string;
+    tvId?: string;
+    sortBy?: "createdAt" | "likes";
+    order?: "asc" | "desc";
+  },
+  callback: (comments: CommentData[]) => void
+) => {
+  const q = query(
+    collection(db, "comments"),
+    movieId ? where("movieId", "==", movieId) : where("tvId", "==", tvId),
+    orderBy(sortBy, order)
+  );
+
+  const unsubscribe = onSnapshot(q, (snapshot) => {
+    const comments = snapshot.docs.map(
+      (doc) =>
+        ({
+          id: doc.id,
+          ...doc.data(),
+        } as CommentData)
+    );
+    callback(comments);
+  });
+
+  return unsubscribe;
+};

@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, ScrollRestoration } from "react-router-dom";
 import Footer from "../../components/Footer";
 import Header from "../../components/header/Header";
 import { useDispatch } from "react-redux";
@@ -31,6 +31,7 @@ export default function BaseLayout() {
         />
       </div>
       <Header />
+      <ScrollRestoration />
       <main>
         <Outlet />
       </main>

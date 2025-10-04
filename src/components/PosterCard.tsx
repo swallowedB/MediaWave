@@ -5,21 +5,34 @@ import { IMAGE_BASE_URL } from "../constants/urls";
 import { toggleBookmarkThunk } from "../store/bookmarkSlice";
 import type { AppDispatch, RootState } from "../store/store";
 import { truncateText } from "../utils/textFormat";
+import { useNavigate } from "react-router-dom";
 
 export default function PosterCard({
   item,
   className,
 }: {
-  item: Movie | Tv | Bookmark;
+  item: MediaBase;
   className?: string;
 }) {
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
   const user = useSelector((state: RootState) => state.auth.user);
   const bookmarks = useSelector((state: RootState) => state.bookmarks.items);
   const maxTitleLength = 14;
 
   const title = "title" in item ? item.title : item.name;
+  const date =
+    "release_date" in item
+      ? item.release_date
+      : "first_air_date" in item
+      ? item.first_air_date
+      : "";
+  const type = "title" in item ? "movie" : "tv";
   const isBookmarked = bookmarks.some((b) => b.id === item.id);
+
+  const handleClick = () => {
+    navigate(`/detail/${type}/${item.id}`);
+  };
 
   const handleBookmark = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -29,7 +42,8 @@ export default function PosterCard({
 
   return (
     <div
-      className={`relative overflow-hidden rounded-2xl group
+      onClick={handleClick}
+      className={`relative overflow-hidden rounded-2xl group cursor-pointer
         bg-white/5 backdrop-blur-xl border border-white/0
         hover:shadow-[0_0_20px_rgba(145, 160, 255, 0.45)]
         hover:scale-[1.02] transition-all duration-500 ease-out
@@ -74,7 +88,7 @@ export default function PosterCard({
         </h3>
         {"release_date" in item && (
           <p className="text-white/60 text-xs mt-1">
-            {item.release_date?.slice(0, 4) || ""}
+            {date.slice(0, 4) || ""}
           </p>
         )}
       </div>
