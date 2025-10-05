@@ -1,23 +1,25 @@
 import gsap from "gsap";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLoaderData, useNavigation } from "react-router-dom";
+import Loading from "../../components/common/Loading";
 import BrowsePreview from "./components/BrowsePreview";
 import Thumbnail from "./components/Thumbnail";
 import TrendingMovies from "./components/TrendingMovies";
-import Loading from "../../components/common/Loading";
 
 export default function Home() {
   const navigation = useNavigation();
-  const { nowplaying, popular, topRated, tvPopular, tvTopRated, tvOnAir } = useLoaderData() as {
-    nowplaying: Movie[];
-    popular: Movie[];
-    trending: Movie[];
-    topRated: Movie[];
-    tvTopRated: Tv[];
-    tvPopular: Tv[];
-    tvOnAir: Tv[];
-  };
+  const { nowplaying, popular, topRated, tvPopular, tvTopRated, tvOnAir } =
+    useLoaderData() as {
+      nowplaying: Movie[];
+      popular: Movie[];
+      trending: Movie[];
+      topRated: Movie[];
+      tvTopRated: Tv[];
+      tvPopular: Tv[];
+      tvOnAir: Tv[];
+    };
   const slidesRef = useRef<HTMLDivElement | null>(null);
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
     if (nowplaying.length === 0 || !slidesRef.current) return;
@@ -35,7 +37,28 @@ export default function Home() {
     }
   }, [nowplaying]);
 
-  if (navigation.state === "loading") return <Loading />;
+  useEffect(() => {
+    const imgs = document.querySelectorAll("img");
+    if (imgs.length === 0) {
+      setIsReady(true);
+      return;
+    }
+
+    let loaded = 0;
+    imgs.forEach((img) => {
+      if (img.complete) {
+        loaded++;
+        if (loaded === imgs.length) setIsReady(true);
+      } else {
+        img.addEventListener("load", () => {
+          loaded++;
+          if (loaded === imgs.length) setIsReady(true);
+        });
+      }
+    });
+  }, [nowplaying]);
+  const isLoading = navigation.state === "loading" || !isReady;
+  if (isLoading) return <Loading />;
 
   return (
     <main className="w-full min-h-screen ">

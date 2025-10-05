@@ -1,5 +1,5 @@
 import { getAuth } from "firebase/auth";
-import { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useLoaderData, useNavigation, useParams } from "react-router-dom";
 import { toast } from "sonner";
@@ -24,12 +24,14 @@ export default function MediaDetail() {
     useLoaderData() as MediaLoaderData;
   const { type, id } = useParams();
   const [comments, setComments] = useState<CommentData[]>([]);
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
     if (!id) return;
 
+    dispatch(showLoading());
+
     const fetchInitial = async () => {
-      dispatch(showLoading());
       try {
         const { comments } = await getComments({
           movieId: type === "movie" ? id : undefined,
@@ -55,9 +57,38 @@ export default function MediaDetail() {
     );
 
     return () => unsubscribe();
-  }, [type, id]);
+  }, [type, id, dispatch]);
 
-  if (navigation.state === "loading") return <Loading />;
+  useEffect(() => {
+    const imgs = document.querySelectorAll("img");
+    if (imgs.length === 0) {
+      dispatch(hideLoading());
+      setIsReady(true);
+      return;
+    }
+
+    let loaded = 0;
+    imgs.forEach((img) => {
+      if (img.complete) {
+        loaded++;
+        if (loaded === imgs.length) {
+          dispatch(hideLoading());
+          setIsReady(true);
+        }
+      } else {
+        img.addEventListener("load", () => {
+          loaded++;
+          if (loaded === imgs.length) {
+            dispatch(hideLoading());
+            setIsReady(true);
+          }
+        });
+      }
+    });
+  }, [images, dispatch]);
+
+  const isLoading = navigation.state === "loading" || !isReady;
+  if (isLoading) return <Loading />;
 
   const handleAddComment = async (
     newComment: Omit<CommentData, "createdAt" | "likes">
@@ -94,27 +125,25 @@ export default function MediaDetail() {
   };
 
   return (
-    <Suspense fallback={<Loading />}>
-      <main className="w-full h-full flex flex-col mb-20 gap-15 2xl:gap-20">
-        <ThumbnailSection item={detail} />
+    <main className="w-full h-full flex flex-col mb-20 gap-15 2xl:gap-20">
+      <ThumbnailSection item={detail} />
 
-        <section className="max-w-screen-2xl mx-auto  px-4 sm:px-8 md:px-40 lg:px-60 2xl:px-80 ">
-          <StillCuts images={images} />
-        </section>
+      <section className="max-w-screen-2xl mx-auto  px-4 sm:px-8 md:px-40 lg:px-60 2xl:px-80 ">
+        <StillCuts images={images} />
+      </section>
 
-        <section className="max-w-screen-2xl h-full mx-auto px-4 sm:px-8 md:px-40 lg:px-60 2xl:px-80 ">
-          <CastSection credits={credits} />
-        </section>
+      <section className="max-w-screen-2xl h-full mx-auto px-4 sm:px-8 md:px-40 lg:px-60 2xl:px-80 ">
+        <CastSection credits={credits} />
+      </section>
 
-        <section className="max-w-screen-2xl mx-auto px-4 sm:px-8 md:px-40 lg:px-60 2xl:px-80">
-          <Recommend items={similar} />
-        </section>
+      <section className="max-w-screen-2xl mx-auto px-4 sm:px-8 md:px-40 lg:px-60 2xl:px-80">
+        <Recommend items={similar} />
+      </section>
 
-        <div className="w-full mx-auto px-4 sm:px-8 md:px-40 lg:px-60 2xl:px-80">
-          <ReviewForm onSubmit={handleAddComment} />
-          <ReviewList comments={comments} />
-        </div>
-      </main>
-    </Suspense>
+      <div className="w-full mx-auto px-4 sm:px-8 md:px-40 lg:px-60 2xl:px-80">
+        <ReviewForm onSubmit={handleAddComment} />
+        <ReviewList comments={comments} />
+      </div>
+    </main>
   );
 }
