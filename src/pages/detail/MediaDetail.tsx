@@ -1,12 +1,15 @@
 import { getAuth } from "firebase/auth";
-import { useEffect, useState } from "react";
-import { useLoaderData, useParams } from "react-router-dom";
+import { Suspense, useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useLoaderData, useNavigation, useParams } from "react-router-dom";
 import { toast } from "sonner";
+import Loading from "../../components/common/Loading";
 import {
   addComment,
   getComments,
   subscribeComments,
 } from "../../services/commentService";
+import { hideLoading, showLoading } from "../../store/loadingSlice";
 import CastSection from "./components/CastSection";
 import Recommend from "./components/Recommend";
 import ReviewForm from "./components/ReviewForm";
@@ -15,6 +18,8 @@ import StillCuts from "./components/StillCuts";
 import ThumbnailSection from "./components/ThumbnailSection";
 
 export default function MediaDetail() {
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
   const { detail, credits, images, similar } =
     useLoaderData() as MediaLoaderData;
   const { type, id } = useParams();
@@ -24,11 +29,16 @@ export default function MediaDetail() {
     if (!id) return;
 
     const fetchInitial = async () => {
-      const { comments } = await getComments({
-        movieId: type === "movie" ? id : undefined,
-        tvId: type === "tv" ? id : undefined,
-      });
-      setComments(comments);
+      dispatch(showLoading());
+      try {
+        const { comments } = await getComments({
+          movieId: type === "movie" ? id : undefined,
+          tvId: type === "tv" ? id : undefined,
+        });
+        setComments(comments);
+      } finally {
+        dispatch(hideLoading());
+      }
     };
     fetchInitial();
 
@@ -46,6 +56,8 @@ export default function MediaDetail() {
 
     return () => unsubscribe();
   }, [type, id]);
+
+  if (navigation.state === "loading") return <Loading />;
 
   const handleAddComment = async (
     newComment: Omit<CommentData, "createdAt" | "likes">
@@ -82,25 +94,27 @@ export default function MediaDetail() {
   };
 
   return (
-    <main className="w-full h-full flex flex-col mb-20 gap-15 2xl:gap-20">
-      <ThumbnailSection item={detail} />
+    <Suspense fallback={<Loading />}>
+      <main className="w-full h-full flex flex-col mb-20 gap-15 2xl:gap-20">
+        <ThumbnailSection item={detail} />
 
-      <section className="max-w-screen-2xl mx-auto  px-4 sm:px-8 md:px-40 lg:px-60 2xl:px-80 ">
-        <StillCuts images={images} />
-      </section>
+        <section className="max-w-screen-2xl mx-auto  px-4 sm:px-8 md:px-40 lg:px-60 2xl:px-80 ">
+          <StillCuts images={images} />
+        </section>
 
-      <section className="max-w-screen-2xl h-full mx-auto px-4 sm:px-8 md:px-40 lg:px-60 2xl:px-80 ">
-        <CastSection credits={credits} />
-      </section>
+        <section className="max-w-screen-2xl h-full mx-auto px-4 sm:px-8 md:px-40 lg:px-60 2xl:px-80 ">
+          <CastSection credits={credits} />
+        </section>
 
-      <section className="max-w-screen-2xl mx-auto px-4 sm:px-8 md:px-40 lg:px-60 2xl:px-80">
-        <Recommend items={similar} />
-      </section>
-      
-      <div className="w-full mx-auto px-4 sm:px-8 md:px-40 lg:px-60 2xl:px-80">
-        <ReviewForm onSubmit={handleAddComment} />
-        <ReviewList comments={comments} />
-      </div>
-    </main>
+        <section className="max-w-screen-2xl mx-auto px-4 sm:px-8 md:px-40 lg:px-60 2xl:px-80">
+          <Recommend items={similar} />
+        </section>
+
+        <div className="w-full mx-auto px-4 sm:px-8 md:px-40 lg:px-60 2xl:px-80">
+          <ReviewForm onSubmit={handleAddComment} />
+          <ReviewList comments={comments} />
+        </div>
+      </main>
+    </Suspense>
   );
 }

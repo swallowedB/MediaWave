@@ -1,11 +1,13 @@
 import gsap from "gsap";
 import { useEffect, useRef } from "react";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useNavigation } from "react-router-dom";
 import BrowsePreview from "./components/BrowsePreview";
 import Thumbnail from "./components/Thumbnail";
 import TrendingMovies from "./components/TrendingMovies";
+import Loading from "../../components/common/Loading";
 
 export default function Home() {
+  const navigation = useNavigation();
   const { nowplaying, popular, topRated, tvPopular, tvTopRated, tvOnAir } = useLoaderData() as {
     nowplaying: Movie[];
     popular: Movie[];
@@ -32,6 +34,8 @@ export default function Home() {
       });
     }
   }, [nowplaying]);
+
+  if (navigation.state === "loading") return <Loading />;
 
   return (
     <main className="w-full min-h-screen ">
