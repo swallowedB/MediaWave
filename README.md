@@ -1,4 +1,9 @@
-# [🎬 MediaWave](https://mediawave-7cd4c.web.app/)
+  <a href="https://mediawave-7cd4c.web.app/">
+      
+ <img width="300" alt="Image" src="https://github.com/user-attachments/assets/26baad3d-3576-45f6-a965-28ed8962fbb8" />
+  <a/>
+  
+---
 
 TMDB API를 기반으로 한 미디어 콘텐츠 탐색 플랫폼입니다. <br/>
 사용자는 작품을 검색하고, 필터링하며, 비슷한 콘텐츠를 추천받고, 리뷰와 북마크를 통해 자신만의 미디어 취향을 기록할 수 있습니다.
