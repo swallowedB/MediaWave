@@ -22,22 +22,6 @@ export default function Home() {
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    if (nowplaying.length === 0 || !slidesRef.current) return;
-
-    const totalSlides = nowplaying.length;
-    const tl = gsap.timeline({ repeat: -1 });
-
-    for (let i = 0; i < totalSlides; i++) {
-      tl.to(slidesRef.current, {
-        xPercent: -100 * (i + 1),
-        duration: 1,
-        delay: 3,
-        ease: "power2.inOut",
-      });
-    }
-  }, [nowplaying]);
-
-  useEffect(() => {
     const imgs = document.querySelectorAll("img");
     if (imgs.length === 0) {
       setIsReady(true);
@@ -57,6 +41,52 @@ export default function Home() {
       }
     });
   }, [nowplaying]);
+
+  useEffect(() => {
+    if (!slidesRef.current || !isReady) return;
+
+    const container = slidesRef.current;
+    const total = container.children.length;
+    if (total === 0) return;
+
+    let tl: gsap.core.Timeline | null = null;
+
+    const setupTimeline = (progress = 0) => {
+      if (tl) tl.kill();
+      const slideWidth = container.clientWidth;
+
+      tl = gsap.timeline({
+        repeat: -1,
+        defaults: { ease: "power2.inOut" },
+      });
+
+      for (let i = 0; i < total; i++) {
+        tl.to(container, {
+          x: -slideWidth * (i + 1),
+          duration: 1,
+          delay: 3,
+        });
+      }
+
+      tl.progress(progress);
+    };
+
+    setupTimeline();
+
+    const handleResize = () => {
+      if (!tl) return;
+      const progress = tl.progress();
+      setupTimeline(progress);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      tl?.kill();
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [isReady, nowplaying]);
+
   const isLoading = navigation.state === "loading" || !isReady;
   if (isLoading) return <Loading />;
 
