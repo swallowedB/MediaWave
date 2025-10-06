@@ -61,9 +61,9 @@ export default function Sidebar({
           >
             {activeTab === tab.key && (
               <span
-                className="absolute inset-y-3.5 left-[-10%] w-[100%]
+                className="absolute inset-y-3 left-[-10%] w-[100%]
                  bg-gradient-to-tr from-blue-500/70 via-purple-500/60 to-transparent
-                 blur-sm opacity-90 pointer-events-none animate-pulse "
+                 blur-sm pointer-events-none animate-pulse "
               />
             )}
             {tab.icon}
