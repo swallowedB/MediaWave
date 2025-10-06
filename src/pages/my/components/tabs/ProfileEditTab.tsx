@@ -9,7 +9,7 @@ import { updateProfile } from "../../../../store/authSlice";
 export default function ProfileEditTab() {
   const user = useSelector((state: RootState) => state.auth.user)
   const dispatch = useDispatch<AppDispatch>();
-  const [nickname, setNickname] = useState("");
+  const [nickname, setNickname] = useState(user?.displayName || "");
   const [profileImage, setProfileImage] = useState(user?.photoURL);
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
 
@@ -100,7 +100,7 @@ export default function ProfileEditTab() {
           <input
             id="nickname"
             type="text"
-            value={user?.displayName || ""}
+            value={nickname}
             onChange={(e) => setNickname(e.target.value)}
             placeholder="닉네임을 입력해주세요."
             className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 
