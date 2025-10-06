@@ -10,4 +10,25 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    sourcemap: false,
+    cssCodeSplit: true,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes("node_modules")) {
+            if (id.includes("firebase")) return "firebase";
+            if (id.includes("lucide-react")) return "icons";
+            if (id.includes("react-router")) return "router";
+            if (id.includes("react-redux")) return "redux";
+            return "vendor";
+          }
+        },
+      },
+    },
+    chunkSizeWarningLimit: 800,
+  },
+  optimizeDeps: {
+    include: ["react", "react-dom", "react-router-dom"],
+  },
 });
