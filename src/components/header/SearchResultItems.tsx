@@ -1,5 +1,6 @@
 import noImage from "@/assets/NoImages.png";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { IMAGE_BASE_URL } from "../../constants/urls";
 import type { RootState } from "../../store/store";
 import {
@@ -8,16 +9,30 @@ import {
   truncateText,
 } from "../../utils/textFormat";
 
-export default function SearchResultItems({ item }: { item: SearchResult }) {
+export default function SearchResultItems({
+  item,
+  onClose,
+}: {
+  item: SearchResult;
+  onClose: () => void;
+}) {
+  const navigate = useNavigate();
   const movieGenres = useSelector(
     (state: RootState) => state.genre.movieGenres
   );
 
+  const type = "title" in item ? "movie" : "tv";
+
   const genres = formatGenres(item.genre_ids, movieGenres || {});
   const maxLength = 35;
 
+  const handleClick = () => {
+    if (onClose) onClose();
+    navigate(`/detail/${type}/${item.id}`);
+  };
+
   return (
-    <>
+    <div onClick={handleClick}>
       <hr className="text-white/40" />
       <section className="flex gap-5 items-center cursor-pointer px-10 py-3 hover:bg-gradient-to-b hover:from-[#625cda]/10 hover:via-[#1a223a]/40 hover:to-[#625cda]/10 transition-all ease-in-out duration-150 ">
         {/* 포스터 */}
@@ -46,7 +61,9 @@ export default function SearchResultItems({ item }: { item: SearchResult }) {
             ) : (
               ""
             )}
-            <span className="bg-white/20 rounded-full px-2 py-1 font-sans text-xs font-medium" >{(item.media_type).toUpperCase()}</span>
+            <span className="bg-white/20 rounded-full px-2 py-1 font-sans text-xs font-medium">
+              {item.media_type.toUpperCase()}
+            </span>
           </div>
           <div className="flex items-center flex-wrap gap-1">
             {genres.length > 0 &&
@@ -64,6 +81,6 @@ export default function SearchResultItems({ item }: { item: SearchResult }) {
           </p>
         </div>
       </section>
-    </>
+    </div>
   );
 }

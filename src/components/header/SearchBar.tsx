@@ -93,6 +93,7 @@ export default function SearchBar() {
         <SearchResults
           items={results}
           loading={loading}
+          onClose = {() => setQuery("")}
           onLoadMore={() => {
             if (page < totalPages) {
               setPage((prev) => prev + 1);

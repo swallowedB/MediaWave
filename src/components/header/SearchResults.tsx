@@ -6,10 +6,12 @@ export default function SearchResults({
   items,
   onLoadMore,
   loading,
+  onClose,
 }: {
   items: SearchResult[];
   onLoadMore: () => void;
   loading: boolean;
+  onClose: () => void;
 }) {
   const ITEM_HEIGHT = 160;
 
@@ -50,7 +52,7 @@ export default function SearchResults({
           >
             {({ index, style }) => (
               <div style={style}>
-                <SearchResultItems item={items[index]} />
+                <SearchResultItems item={items[index]} onClose={onClose} />
               </div>
             )}
           </List>
