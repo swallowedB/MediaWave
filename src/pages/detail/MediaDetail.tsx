@@ -125,18 +125,18 @@ export default function MediaDetail() {
   };
 
   return (
-    <main className="w-full h-full flex flex-col mb-20 gap-15 2xl:gap-20">
+    <main className="w-screen h-full flex flex-col mb-20 gap-15 2xl:gap-20">
       <ThumbnailSection item={detail} />
 
-      <section className="max-w-screen-2xl mx-auto  px-4 sm:px-8 md:px-40 lg:px-60 2xl:px-80 ">
+      <section className="w-full mx-auto  px-4 sm:px-8 md:px-40 lg:px-60 2xl:px-80 ">
         <StillCuts images={images} />
       </section>
 
-      <section className="max-w-screen-2xl h-full mx-auto px-4 sm:px-8 md:px-40 lg:px-60 2xl:px-80 ">
+      <section className="w-full h-full mx-auto px-4 sm:px-8 md:px-40 lg:px-60 2xl:px-80 ">
         <CastSection credits={credits} />
       </section>
 
-      <section className="max-w-screen-2xl mx-auto px-4 sm:px-8 md:px-40 lg:px-60 2xl:px-80">
+      <section className="w-full mx-auto px-4 sm:px-8 md:px-40 lg:px-60 2xl:px-80">
         <Recommend items={similar} />
       </section>
 
