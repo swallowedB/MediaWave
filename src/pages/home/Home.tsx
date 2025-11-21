@@ -1,13 +1,11 @@
 import gsap from "gsap";
 import { useEffect, useRef, useState } from "react";
-import { useLoaderData, useNavigation } from "react-router-dom";
-import Loading from "../../components/common/Loading";
+import { useLoaderData } from "react-router-dom";
 import BrowsePreview from "./components/BrowsePreview";
 import Thumbnail from "./components/Thumbnail";
 import TrendingMovies from "./components/TrendingMovies";
 
 export default function Home() {
-  const navigation = useNavigation();
   const { nowplaying, popular, topRated, tvPopular, tvTopRated, tvOnAir } =
     useLoaderData() as {
       nowplaying: Movie[];
