@@ -87,9 +87,6 @@ export default function Home() {
     };
   }, [isReady, nowplaying]);
 
-  const isLoading = navigation.state === "loading" || !isReady;
-  if (isLoading) return <Loading />;
-
   return (
     <main className="w-full min-h-screen ">
       <section className="relative w-screen h-screen ">
